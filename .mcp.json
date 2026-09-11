@@ -11,6 +11,16 @@
         "--cdp-endpoint",
         "http://localhost:9222"
       ]
+    },
+    "postgres": {
+      "type": "stdio",
+      "command": "postgres-mcp",
+      "args": [
+        "--access-mode=unrestricted"
+      ],
+      "env": {
+        "DATABASE_URI": "${POSTGRES_URL}"
+      }
     }
   }
 }

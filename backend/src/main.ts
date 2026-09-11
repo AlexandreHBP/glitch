@@ -5,6 +5,19 @@
  * subir a aplicação se JWT_SECRET não estiver configurado corretamente
  * (ver "Operação" nas notas de arquitetura).
  */
+import * as dotenv from 'dotenv';
+// dotenv nunca sobrescreve uma variável já definida no processo. A plataforma
+// de hospedagem injeta um JWT_SECRET genérico de exemplo no ambiente, que
+// vencia o segredo real definido em .env e derrubava o boot (ver
+// assertJwtSecretIsSafe abaixo). Sobrescrevemos aqui APENAS o JWT_SECRET com
+// o valor de .env — as demais variáveis (ex.: credenciais reais do Postgres
+// gerenciado pela plataforma) continuam preferindo o valor já presente no
+// processo, que é o que efetivamente está em uso.
+const dotenvValues = dotenv.config().parsed ?? {};
+if (dotenvValues.JWT_SECRET) {
+  process.env.JWT_SECRET = dotenvValues.JWT_SECRET;
+}
+
 import { NestFactory, Reflector } from '@nestjs/core';
 import {
   ClassSerializerInterceptor,

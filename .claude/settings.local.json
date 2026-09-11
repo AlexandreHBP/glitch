@@ -1,7 +1,8 @@
 {
   "enabledMcpjsonServers": [
     "kanban-api",
-    "playwright"
+    "playwright",
+    "postgres"
   ],
   "enableAllProjectMcpServers": true,
   "language": "portuguese"
