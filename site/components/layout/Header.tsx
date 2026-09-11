@@ -28,13 +28,22 @@ function CartIcon() {
   );
 }
 
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="m20 20-4.7-4.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function Header() {
   const { user, logout } = useAuth();
   const { totalItems, isHydrated } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-slate-950/60">
+    <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-black">
       <nav aria-label="Navegação principal" className="container-section flex h-16 items-center justify-between">
         <Link href="/" className="glitch-hover flex items-center gap-2 font-semibold tracking-tight">
           <span
@@ -43,12 +52,12 @@ export function Header() {
           >
             ◆
           </span>
-          <GlitchText as="span" intensity="strong" className="text-base uppercase tracking-widest">
+          <GlitchText as="span" intensity="strong" className="font-display text-lg uppercase tracking-widest">
             {siteConfig.name}
           </GlitchText>
         </Link>
 
-        <ul className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
+        <ul className="hidden items-center gap-8 text-sm uppercase tracking-wide text-slate-300 md:flex">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link href={item.href} className="transition-colors hover:text-bone">
@@ -59,6 +68,17 @@ export function Header() {
         </ul>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Busca (RF01): sem modal de busca própria ainda — leva direto
+              para o catálogo, onde o campo de busca (ProductFilters) já
+              existe e recebe o foco. Ver observações finais da tarefa. */}
+          <Link
+            href="/produtos"
+            aria-label="Buscar produtos"
+            className="glitch-hover flex h-9 w-9 items-center justify-center rounded-md text-slate-200 hover:bg-white/5 hover:text-bone"
+          >
+            <SearchIcon />
+          </Link>
+
           <Link
             href="/carrinho"
             aria-label={`Carrinho${isHydrated && totalItems > 0 ? `, ${totalItems} ${totalItems === 1 ? "item" : "itens"}` : ""}`}
@@ -114,7 +134,7 @@ export function Header() {
       </nav>
 
       {isMenuOpen && (
-        <div id="mobile-menu" className="border-t border-white/5 bg-slate-950 md:hidden">
+        <div id="mobile-menu" className="border-t border-white/5 bg-black md:hidden">
           <ul className="container-section flex flex-col gap-1 py-4 text-sm text-slate-200">
             {navItems.map((item) => (
               <li key={item.href}>

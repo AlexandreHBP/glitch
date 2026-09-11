@@ -7,20 +7,26 @@ type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-white shadow-lg shadow-brand-600/30 hover:bg-brand-500 active:bg-brand-700",
+    "bg-wine text-bone shadow-lg shadow-wine/30 hover:bg-wine-bright active:bg-wine-deep",
+  // Outline puro (fundo transparente) — bate com o botão "NOVIDADES" do
+  // mockup de referência da home, em vez de um preenchimento translúcido.
   secondary:
-    "bg-white/10 text-white border border-white/15 hover:bg-white/15 backdrop-blur",
+    "bg-transparent text-white border border-white/30 hover:border-white/60 hover:bg-white/5",
   ghost: "text-slate-200 hover:text-white hover:bg-white/5",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-9 px-3 text-sm",
+  sm: "h-9 px-3 text-xs",
   md: "h-11 px-5 text-sm",
-  lg: "h-12 px-6 text-base",
+  lg: "h-12 px-6 text-sm",
 };
 
+// Caixa alta + tracking largo em todos os botões, conforme identidade
+// visual Glitch (tipografia bold condensada em caixa alta do mockup). O
+// texto acessível continua em caixa normal no JSX — é só transformação
+// visual via CSS, então leitores de tela não leem sigla nem soletrado.
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:pointer-events-none disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-md font-bold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:pointer-events-none disabled:opacity-60";
 
 type CommonProps = {
   variant?: Variant;

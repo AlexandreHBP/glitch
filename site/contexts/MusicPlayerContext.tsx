@@ -30,11 +30,18 @@ type MusicPlayerContextValue = {
   currentTrack: PlaylistTrack | null;
   isPlaying: boolean;
   volume: number;
+  /** Progresso da faixa atual, de 0 a 1. 0 quando não há metadata ainda. */
+  progress: number;
   audioRef: React.RefObject<HTMLAudioElement | null>;
   play: (trackId?: string) => void;
   pause: () => void;
   togglePlay: () => void;
   selectTrack: (trackId: string) => void;
+  /** Troca para a próxima/anterior faixa da playlist e já toca — mesmo
+   * comportamento de selectTrack, é uma ação explícita do usuário (RN04
+   * continua respeitada: nada toca sozinho, só em resposta a clique). */
+  nextTrack: () => void;
+  previousTrack: () => void;
   setVolume: (value: number) => void;
 };
 
@@ -49,6 +56,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const [currentTrackId, setCurrentTrackId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(0.7);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
     playlistApi
@@ -57,6 +66,23 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       .catch(() => setTracks([]))
       .finally(() => setIsLoading(false));
   }, []);
+
+  // Seleciona a primeira faixa só para exibição (nome/artista aparecem no
+  // widget "tocando agora" mesmo antes de qualquer clique) assim que a
+  // playlist carrega — nunca chama play()/isPlaying aqui, então RN04
+  // continua intacta: o áudio nasce sempre pausado.
+  useEffect(() => {
+    if (!currentTrackId && tracks.length > 0) {
+      setCurrentTrackId(tracks[0].id);
+    }
+  }, [tracks, currentTrackId]);
+
+  // Zera o progresso exibido ao trocar de faixa, para a barra não mostrar
+  // por um instante o percentual da faixa anterior.
+  useEffect(() => {
+    setCurrentTime(0);
+    setDuration(0);
+  }, [currentTrackId]);
 
   // Hidrata SÓ faixa escolhida e volume — nunca "estava tocando".
   useEffect(() => {
@@ -124,17 +150,36 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     setIsPlaying(true);
   }
 
+  function nextTrack() {
+    if (tracks.length === 0) return;
+    const currentIndex = tracks.findIndex((track) => track.id === currentTrackId);
+    const next = tracks[(currentIndex + 1) % tracks.length];
+    selectTrack(next.id);
+  }
+
+  function previousTrack() {
+    if (tracks.length === 0) return;
+    const currentIndex = tracks.findIndex((track) => track.id === currentTrackId);
+    const previousIndex = currentIndex <= 0 ? tracks.length - 1 : currentIndex - 1;
+    selectTrack(tracks[previousIndex].id);
+  }
+
+  const progress = duration > 0 ? Math.min(currentTime / duration, 1) : 0;
+
   const value: MusicPlayerContextValue = {
     tracks,
     isLoading,
     currentTrack,
     isPlaying,
     volume,
+    progress,
     audioRef,
     play,
     pause,
     togglePlay,
     selectTrack,
+    nextTrack,
+    previousTrack,
     setVolume: setVolumeState,
   };
 
@@ -147,6 +192,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
         src={currentTrack?.url}
         preload="none"
         onEnded={() => setIsPlaying(false)}
+        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
       />
     </MusicPlayerContext.Provider>
   );

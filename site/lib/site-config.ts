@@ -30,11 +30,18 @@ export const siteConfig = {
   creator: "Glitch",
   publisher: "Glitch",
   themeColor: "#670001",
+  // TODO(Alexandre): tiktok/discord/youtube abaixo estão com links
+  // genéricos de placeholder (não são os perfis reais da loja) — troque
+  // pelos handles/convites reais assim que existirem. Usados nos ícones
+  // sociais do rodapé (mockup de referência mostra IG/TK/DC/YT).
   social: {
     twitter: "@glitch",
     linkedin: "",
     github: "",
     instagram: "https://instagram.com",
+    tiktok: "https://tiktok.com",
+    discord: "https://discord.com",
+    youtube: "https://youtube.com",
   },
   contact: {
     email: "contato@glitch.com.br",

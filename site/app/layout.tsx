@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Anton } from "next/font/google";
 import Script from "next/script";
 import { buildMetadata, buildOrganizationJsonLd, buildWebsiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -19,6 +19,18 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
+});
+
+// Fonte de destaque (Fase 5 — refresh visual Glitch): condensada, bold,
+// única em peso 400 (já é extremamente pesada visualmente). Usada só em
+// títulos grandes (Hero, títulos de seção, wordmark) via classe
+// `font-display` — nunca em texto corrido, preço ou formulário, pelos
+// mesmos motivos do GlitchText (legibilidade).
+const anton = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = buildMetadata();
@@ -42,7 +54,7 @@ export default function RootLayout({
   const { googleAnalyticsId, googleTagManagerId } = siteConfig.analytics;
 
   return (
-    <html lang={siteConfig.language} className={inter.variable} suppressHydrationWarning>
+    <html lang={siteConfig.language} className={`${inter.variable} ${anton.variable}`} suppressHydrationWarning>
       <head>
         {/* Dados estruturados (JSON-LD) — habilitam rich results no Google */}
         <Script

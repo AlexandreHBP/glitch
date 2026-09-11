@@ -30,7 +30,7 @@ export async function CategoryShowcase() {
     <Section
       id="categorias"
       eyebrow="Categorias"
-      title="Navegue pela coleção"
+      title="Escolha por categoria"
       description="Escolha por onde começar. Cada categoria mostra o total de peças disponíveis agora."
     >
       <ul role="list" className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">

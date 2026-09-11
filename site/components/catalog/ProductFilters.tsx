@@ -63,7 +63,7 @@ export function ProductFilters({ categories }: { categories: Category[] }) {
           type="button"
           onClick={() => handleCategoryChange("")}
           className={cn(
-            "rounded-full px-4 py-1.5 text-sm transition",
+            "rounded-md px-4 py-2 text-xs font-semibold uppercase tracking-wide transition sm:text-sm",
             activeCategoryId === "" ? "bg-wine text-bone" : "bg-white/5 text-slate-300 hover:bg-white/10",
           )}
           aria-pressed={activeCategoryId === ""}
@@ -76,7 +76,7 @@ export function ProductFilters({ categories }: { categories: Category[] }) {
             type="button"
             onClick={() => handleCategoryChange(category.id)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-sm transition",
+              "rounded-md px-4 py-2 text-xs font-semibold uppercase tracking-wide transition sm:text-sm",
               activeCategoryId === category.id
                 ? "bg-wine text-bone"
                 : "bg-white/5 text-slate-300 hover:bg-white/10",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { CategoryShowcase } from "@/components/sections/CategoryShowcase";
-import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
+import { Collection } from "@/components/sections/Collection";
 import { Features } from "@/components/sections/Features";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { CTA } from "@/components/sections/CTA";
@@ -23,7 +23,7 @@ export default function HomePage() {
     <>
       <Hero />
       <CategoryShowcase />
-      <FeaturedProducts />
+      <Collection />
       <Features />
       <HowItWorks />
       <CTA />

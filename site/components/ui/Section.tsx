@@ -37,7 +37,7 @@ export function Section({
               </p>
             )}
             {title && (
-              <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl heading-gradient">
+              <h2 className="text-balance font-display text-3xl uppercase tracking-tight sm:text-4xl heading-gradient">
                 {title}
               </h2>
             )}
