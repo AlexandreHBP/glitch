@@ -1,0 +1,8 @@
+{
+  "enabledMcpjsonServers": [
+    "kanban-api",
+    "playwright"
+  ],
+  "enableAllProjectMcpServers": true,
+  "language": "portuguese"
+}

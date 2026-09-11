@@ -1,0 +1,58 @@
+# Dependências (reinstaladas no build)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build artifacts (Next regera dentro do container)
+.next
+out
+build
+dist
+
+# Versionamento
+.git
+.gitignore
+.gitattributes
+
+# Variáveis locais (use --build-arg ou --env-file no docker run)
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+*.swp
+*.swo
+
+# Testes / coverage
+coverage
+.nyc_output
+*.lcov
+
+# Documentação não necessária em runtime
+README.md
+rules
+docs
+*.md
+
+# Configs de tooling local
+.eslintcache
+.prettiercache
+.turbo
+
+# CI / Docker
+.github
+.gitlab-ci.yml
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Lock auxiliares (mantém apenas os principais)
+.pnp
+.pnp.*
+.yarn/install-state.gz
+.yarn/cache

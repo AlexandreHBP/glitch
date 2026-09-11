@@ -1,0 +1,35 @@
+{
+  "kind": "infra",
+  "title": "Loja Glitch — visao geral",
+  "direction": "LR",
+  "groups": [
+    { "id": "pessoas", "label": "Pessoas" },
+    { "id": "app", "label": "Container da aplicacao" },
+    { "id": "dados", "label": "Dados" }
+  ],
+  "nodes": [
+    { "id": "cliente", "type": "client", "label": "Cliente", "tech": "celular e desktop", "group": "pessoas",
+      "description": "Navega no catalogo, cria conta e faz o pedido." },
+    { "id": "admin", "type": "client", "label": "Admin (Alexandre)", "tech": "painel /admin", "group": "pessoas",
+      "description": "Unico operador: cadastra produtos, ve pedidos e monta a playlist.",
+      "comment": "Requisito que molda o sistema todo: o painel e operado por uma pessoa\nsem conhecimento tecnico. Preferir telas obvias e poucos campos a\nflexibilidade de configuracao." },
+    { "id": "spa", "type": "frontend", "label": "Loja Glitch (SPA)", "tech": "React · Vite · abre arquivo ›", "icon": "react", "group": "app",
+      "ref": "@infra-do-frontend-react-da-loja.json" },
+    { "id": "api", "type": "api", "label": "API Glitch", "tech": "NestJS · abre arquivo ›", "icon": "nodedotjs", "group": "app",
+      "description": "Servida no mesmo container: tambem entrega a SPA como estatico.",
+      "comment": "Monolito modular de proposito: um unico deploy, um unico container e um\nunico banco para um negocio de dezenas a centenas de clientes.\nSeparar em servicos aqui so criaria custo de operacao sem beneficio.",
+      "ref": "@infra-do-backend-nestjs-da-loja.json" },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "tech": "abre o MER ›", "icon": "postgresql", "group": "dados",
+      "ref": "@mer-do-esquema-da-loja-glitch.json" },
+    { "id": "midia", "type": "storage", "label": "Midia", "tech": "volume /uploads", "group": "dados",
+      "description": "Fotos dos produtos e arquivos de musica da playlist." }
+  ],
+  "edges": [
+    { "from": "cliente", "to": "spa", "label": "https", "animated": true },
+    { "from": "admin", "to": "spa", "label": "https /admin", "animated": true },
+    { "from": "spa", "to": "api", "label": "REST /api/v1", "animated": true },
+    { "from": "api", "to": "db", "label": "sql", "animated": true },
+    { "from": "api", "to": "midia", "label": "le e grava arquivos" },
+    { "from": "spa", "to": "midia", "label": "carrega fotos e audio", "dashed": true }
+  ]
+}

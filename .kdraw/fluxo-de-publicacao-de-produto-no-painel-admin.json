@@ -1,0 +1,40 @@
+{
+  "kind": "fluxograma",
+  "title": "Publicacao de produto pelo painel admin",
+  "direction": "TB",
+  "nodes": [
+    { "id": "ini", "type": "start", "label": "Admin abre o painel de produtos" },
+    { "id": "dados", "type": "process", "label": "Preencher nome, descricao, preco e categoria" },
+    { "id": "fotos", "type": "io", "label": "Enviar fotos do produto",
+      "description": "Upload multipart; o backend converte para webp e gera miniatura.",
+      "comment": "Sem otimizacao no upload o catalogo fica pesado: foto de celular tem 4-6 MB.\nRedimensionar para 1600px e webp no servidor e o que segura o tempo de\ncarregamento prometido no RF13." },
+    { "id": "var", "type": "process", "label": "Cadastrar variacoes de tamanho e cor" },
+    { "id": "est", "type": "process", "label": "Definir estoque de cada variacao",
+      "description": "Cada variacao tem estoque proprio e independente (RN01)." },
+    { "id": "valid", "type": "decision", "label": "Dados validos e sem variacao duplicada?" },
+    { "id": "erro", "type": "io", "label": "Mostrar erros no formulario" },
+    { "id": "salvar", "type": "process", "label": "Salvar produto no banco" },
+    { "id": "pub", "type": "decision", "label": "Publicar no catalogo agora?" },
+    { "id": "ativo", "type": "process", "label": "Marcar produto como ativo" },
+    { "id": "inativo", "type": "process", "label": "Manter produto inativo" },
+    { "id": "cat", "type": "io", "label": "Produto aparece no catalogo do site" },
+    { "id": "fim", "type": "end", "label": "Produto publicado" },
+    { "id": "fimrasc", "type": "end", "label": "Produto salvo sem publicar" }
+  ],
+  "edges": [
+    { "from": "ini", "to": "dados", "animated": true },
+    { "from": "dados", "to": "fotos", "animated": true },
+    { "from": "fotos", "to": "var", "animated": true },
+    { "from": "var", "to": "est", "animated": true },
+    { "from": "est", "to": "valid" },
+    { "from": "valid", "to": "erro", "label": "Nao", "dashed": true },
+    { "from": "erro", "to": "dados", "dashed": true },
+    { "from": "valid", "to": "salvar", "label": "Sim", "animated": true },
+    { "from": "salvar", "to": "pub" },
+    { "from": "pub", "to": "ativo", "label": "Sim", "animated": true },
+    { "from": "pub", "to": "inativo", "label": "Nao", "dashed": true },
+    { "from": "ativo", "to": "cat", "animated": true },
+    { "from": "cat", "to": "fim", "animated": true },
+    { "from": "inativo", "to": "fimrasc", "dashed": true }
+  ]
+}

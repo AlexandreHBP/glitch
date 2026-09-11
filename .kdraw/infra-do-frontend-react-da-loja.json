@@ -1,0 +1,51 @@
+{
+  "kind": "infra",
+  "title": "Frontend React da Loja Glitch",
+  "direction": "LR",
+  "groups": [
+    { "id": "base", "label": "Base da aplicacao" },
+    { "id": "loja", "label": "Loja publica" },
+    { "id": "conta", "label": "Area do cliente" },
+    { "id": "admin", "label": "Painel do admin" }
+  ],
+  "nodes": [
+    { "id": "router", "type": "frontend", "label": "AppRouter", "tech": "React Router", "group": "base",
+      "description": "Rotas publicas, rotas de cliente logado e rotas admin protegidas por papel." },
+    { "id": "visual", "type": "service", "label": "Camada Glitch UI", "tech": "abre arquivo ›", "group": "base",
+      "description": "Tema, efeitos e player que envolvem todas as paginas.",
+      "ref": "@infra-da-identidade-visual-glitch-no-frontend.json" },
+    { "id": "catalogo", "type": "frontend", "label": "Catalogo e produto", "tech": "lista e detalhe", "group": "loja",
+      "description": "Grade responsiva, seletor de tamanho/cor e aviso de esgotado (RF01)." },
+    { "id": "carrinho", "type": "frontend", "label": "Carrinho", "tech": "localStorage", "group": "loja",
+      "description": "Estado local ate o checkout; conteudo revalidado pelo backend no envio.",
+      "comment": "Carrinho anonimo persiste no navegador e e reaproveitado apos o login —\nsem isso o cliente perde as escolhas ao ser mandado para o cadastro,\nque e o ponto classico de abandono nesse fluxo." },
+    { "id": "minhaconta", "type": "frontend", "label": "Minha conta", "tech": "pedidos e status", "group": "conta",
+      "description": "Historico de pedidos e status atual (RF02 e RF06)." },
+    { "id": "adminprod", "type": "frontend", "label": "Admin · Produtos", "tech": "CRUD + fotos", "group": "admin",
+      "description": "Tela mais usada do painel; precisa ser obvia para um operador leigo (RF07)." },
+    { "id": "adminped", "type": "frontend", "label": "Admin · Pedidos", "tech": "lista e status", "group": "admin",
+      "description": "Substitui o caderno: ve pedidos e muda status (RF08)." },
+    { "id": "adminplay", "type": "frontend", "label": "Admin · Playlist", "tech": "upload de faixas", "group": "admin",
+      "description": "Gerencia as musicas oferecidas no player (RF10)." },
+    { "id": "client", "type": "api", "label": "Cliente HTTP", "tech": "axios · TanStack Query", "group": "base",
+      "description": "Ponto unico de chamada: injeta o JWT e trata 401 deslogando o usuario." },
+    { "id": "backend", "type": "api", "label": "API Glitch", "tech": "NestJS · /api/v1", "icon": "nodedotjs", "group": "base",
+      "description": "Mesma origem em producao, entao nao ha CORS nem proxy no ar." }
+  ],
+  "edges": [
+    { "from": "router", "to": "visual", "label": "envolve as rotas", "animated": true },
+    { "from": "router", "to": "catalogo", "label": "/" , "animated": true },
+    { "from": "router", "to": "carrinho", "label": "/carrinho" },
+    { "from": "router", "to": "minhaconta", "label": "/conta (logado)" },
+    { "from": "router", "to": "adminprod", "label": "/admin/produtos" },
+    { "from": "router", "to": "adminped", "label": "/admin/pedidos" },
+    { "from": "router", "to": "adminplay", "label": "/admin/playlist" },
+    { "from": "catalogo", "to": "client", "label": "consulta" },
+    { "from": "carrinho", "to": "client", "label": "finaliza pedido", "animated": true },
+    { "from": "minhaconta", "to": "client", "label": "consulta" },
+    { "from": "adminprod", "to": "client", "label": "grava" },
+    { "from": "adminped", "to": "client", "label": "grava" },
+    { "from": "adminplay", "to": "client", "label": "grava" },
+    { "from": "client", "to": "backend", "label": "https", "animated": true }
+  ]
+}

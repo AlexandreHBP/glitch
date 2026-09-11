@@ -1,0 +1,37 @@
+{
+  "kind": "sequence",
+  "title": "Finalizacao do pedido pelo cliente",
+  "participants": [
+    { "id": "cliente", "label": "Cliente", "kind": "actor",
+      "description": "Precisa estar logado para finalizar (RN02)." },
+    { "id": "spa", "label": "SPA Glitch", "kind": "boundary",
+      "description": "Carrinho vive no localStorage do navegador ate este momento.",
+      "comment": "Nao existe tabela de carrinho no banco. O carrinho e local e SEMPRE\nrevalidado pelo backend no POST: preco e estoque do localStorage nunca\nsao confiaveis (o cliente pode edita-los)." },
+    { "id": "api", "label": "OrdersController", "kind": "boundary",
+      "description": "POST /api/v1/orders, protegido por JwtAuthGuard." },
+    { "id": "pedido", "label": "CreateOrderUseCase", "kind": "control",
+      "description": "Orquestra a transacao do pedido. Abre o ciclo de vida do pedido ›",
+      "ref": "@fluxo-de-status-do-pedido.json" },
+    { "id": "estoque", "label": "InventoryService", "kind": "control",
+      "description": "Unico ponto autorizado a alterar stock_quantity." },
+    { "id": "db", "label": "PostgreSQL", "kind": "database" }
+  ],
+  "messages": [
+    { "from": "cliente", "to": "spa", "label": "Finalizar pedido", "type": "sync" },
+    { "from": "spa", "to": "spa", "label": "Confere login e itens do carrinho", "type": "self" },
+    { "from": "spa", "to": "api", "label": "Envia itens e forma de entrega", "type": "sync", "note": "POST /orders + JWT" },
+    { "from": "api", "to": "api", "label": "Valida DTO (class-validator)", "type": "self" },
+    { "from": "api", "to": "pedido", "label": "Executa criacao do pedido", "type": "sync" },
+    { "from": "pedido", "to": "db", "label": "Abre transacao e trava as variacoes", "type": "sync", "note": "SELECT FOR UPDATE" },
+    { "from": "db", "to": "pedido", "label": "Preco e estoque atuais por variacao", "type": "return" },
+    { "from": "pedido", "to": "pedido", "label": "Recalcula total pelo preco do banco", "type": "self", "note": "ignora preco do cliente" },
+    { "from": "pedido", "to": "estoque", "label": "Debita estoque de cada variacao", "type": "sync" },
+    { "from": "estoque", "to": "db", "label": "Grava movimento de estoque", "type": "sync" },
+    { "from": "estoque", "to": "pedido", "label": "Estoque debitado ou erro de indisponibilidade", "type": "return" },
+    { "from": "pedido", "to": "db", "label": "Grava pedido, itens e status inicial", "type": "sync", "note": "preco congelado" },
+    { "from": "db", "to": "pedido", "label": "Pedido AGUARDANDO_CONTATO", "type": "return" },
+    { "from": "pedido", "to": "api", "label": "Pedido criado", "type": "return" },
+    { "from": "api", "to": "spa", "label": "201 com numero do pedido", "type": "return" },
+    { "from": "spa", "to": "cliente", "label": "Confirma e avisa que o pagamento sera combinado", "type": "return", "note": "sem cobranca online" }
+  ]
+}

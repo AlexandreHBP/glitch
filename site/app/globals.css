@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+    color-scheme: dark;
+
+    /* Identidade visual Glitch — única fonte da cor da marca. Nenhum
+       componente deve escrever #670001 diretamente; sempre via estes
+       tokens (expostos no tailwind.config.ts como wine/ink/bone/glitch-*). */
+    --glitch-wine: #670001;
+    --glitch-wine-bright: #8f0102;
+    --glitch-wine-deep: #3d0001;
+    --glitch-ink: #0b0b0c;
+    --glitch-bone: #f2efe9;
+    --glitch-cyan: #00e5ff;
+    --glitch-magenta: #ff003c;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  ::selection {
+    @apply bg-brand-500/40 text-white;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-400 ring-offset-2 ring-offset-slate-950;
+  }
+
+  /* Acessibilidade: respeita usuários que pedem menos movimento. Cobre
+     todas as animações CSS puras (glitch, ovelha). Efeitos com JS por
+     frame (parallax) verificam prefers-reduced-motion explicitamente via
+     o hook useReducedMotion antes de rodar. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-section {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .heading-gradient {
+    @apply bg-gradient-to-br from-white via-slate-100 to-brand-200 bg-clip-text text-transparent;
+  }
+
+  /* ────────────────────────────────────────────────────────────────────
+     GlitchText (RF09) — logo e títulos de seção.
+     CSS puro: duas cópias reais (não pseudo-elementos, para permitir
+     aria-hidden de verdade) deslocadas em ciano/magenta e animadas por
+     clip-path. O texto real (.glitch-text__base) permanece intacto,
+     selecionável e é o único lido por leitores de tela. Proibido em
+     texto corrido, descrição de produto, preço ou formulários.
+     ──────────────────────────────────────────────────────────────────── */
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+  }
+
+  .glitch-text__base {
+    position: relative;
+    z-index: 1;
+  }
+
+  .glitch-text__layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .glitch-text__layer::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    white-space: nowrap;
+  }
+
+  .glitch-text__layer--cyan::before {
+    color: var(--glitch-cyan);
+    transform: translate(2px, 0);
+    animation: glitchLayerA 3.4s infinite steps(2, jump-none);
+  }
+
+  .glitch-text__layer--magenta::before {
+    color: var(--glitch-magenta);
+    transform: translate(-2px, 0);
+    animation: glitchLayerB 2.8s infinite steps(2, jump-none);
+  }
+
+  .glitch-text--subtle .glitch-text__layer {
+    opacity: 0.35;
+  }
+
+  .glitch-text--strong .glitch-text__layer {
+    opacity: 0.75;
+  }
+
+  /* ────────────────────────────────────────────────────────────────────
+     Reação glitch ao hover/toque em botões e imagens (RF09). Desktop usa
+     :hover; touch usa :active dentro de @media (hover: none), já que
+     dispositivos touch não têm estado de hover real. Só transform/filter
+     — nunca desloca layout.
+     ──────────────────────────────────────────────────────────────────── */
+  .glitch-hover {
+    transition: transform 150ms ease, filter 150ms ease;
+  }
+
+  .glitch-hover:hover,
+  .glitch-hover:focus-visible {
+    animation: glitchHoverShake 220ms steps(2, jump-none);
+    filter: drop-shadow(2px 0 var(--glitch-cyan)) drop-shadow(-2px 0 var(--glitch-magenta));
+  }
+
+  @media (hover: none) {
+    .glitch-hover:active {
+      animation: glitchHoverShake 220ms steps(2, jump-none);
+      filter: drop-shadow(2px 0 var(--glitch-cyan)) drop-shadow(-2px 0 var(--glitch-magenta));
+    }
+  }
+
+  /* ────────────────────────────────────────────────────────────────────
+     Ovelha negra animada no rodapé (RF11). SVG inline, só transform.
+     ──────────────────────────────────────────────────────────────────── */
+  .black-sheep-track {
+    position: relative;
+    height: 3.5rem;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .black-sheep-walker {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3.5rem;
+    animation: sheepWalk 24s linear infinite;
+    will-change: transform;
+  }
+
+  .black-sheep-bob {
+    animation: sheepBob 0.5s ease-in-out infinite alternate;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes glitchLayerA {
+  0%,
+  100% {
+    clip-path: inset(0 0 85% 0);
+  }
+  20% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  40% {
+    clip-path: inset(40% 0 40% 0);
+  }
+  60% {
+    clip-path: inset(70% 0 5% 0);
+  }
+  80% {
+    clip-path: inset(20% 0 65% 0);
+  }
+}
+
+@keyframes glitchLayerB {
+  0%,
+  100% {
+    clip-path: inset(60% 0 10% 0);
+  }
+  25% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  50% {
+    clip-path: inset(45% 0 30% 0);
+  }
+  75% {
+    clip-path: inset(5% 0 80% 0);
+  }
+}
+
+@keyframes glitchHoverShake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2px, 1px);
+  }
+  50% {
+    transform: translate(2px, -1px);
+  }
+  75% {
+    transform: translate(-1px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes sheepWalk {
+  0% {
+    transform: translateX(-10vw) scaleX(1);
+  }
+  45% {
+    transform: translateX(105vw) scaleX(1);
+  }
+  50% {
+    transform: translateX(105vw) scaleX(-1);
+  }
+  95% {
+    transform: translateX(-10vw) scaleX(-1);
+  }
+  100% {
+    transform: translateX(-10vw) scaleX(1);
+  }
+}
+
+@keyframes sheepBob {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3px);
+  }
+}

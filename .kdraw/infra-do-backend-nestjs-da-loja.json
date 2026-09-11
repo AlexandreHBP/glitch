@@ -1,0 +1,50 @@
+{
+  "kind": "infra",
+  "title": "Backend NestJS da Loja Glitch",
+  "direction": "LR",
+  "groups": [
+    { "id": "entrada", "label": "Entrada HTTP" },
+    { "id": "dominio", "label": "Modulos de dominio" },
+    { "id": "dados", "label": "Dados e arquivos" }
+  ],
+  "nodes": [
+    { "id": "http", "type": "gateway", "label": "Nest HTTP", "tech": "REST /api/v1 · Swagger", "group": "entrada",
+      "description": "ValidationPipe global, filtro de excecao e prefixo de versao." },
+    { "id": "auth", "type": "auth", "label": "AuthModule", "tech": "JWT · bcrypt", "group": "entrada",
+      "description": "Login e cadastro de cliente; JwtAuthGuard e RolesGuard protegem as rotas.",
+      "comment": "Um unico users.role separa cliente de admin — nao ha tabela de admin.\nO admin e criado por seed com senha vinda de env (ADMIN_PASSWORD);\nse essa env vazar ou ficar no default, o painel inteiro cai junto." },
+    { "id": "catalog", "type": "service", "label": "CatalogModule", "tech": "abre o fluxo ›", "group": "dominio",
+      "description": "Produtos, variacoes, categorias e fotos. Fase 1.",
+      "ref": "@fluxo-de-publicacao-de-produto-no-painel-admin.json" },
+    { "id": "orders", "type": "service", "label": "OrdersModule", "tech": "abre a sequencia ›", "group": "dominio",
+      "description": "Criacao de pedido, historico e mudanca de status. Fases 2 e 3.",
+      "ref": "@sequencia-de-finalizacao-do-pedido.json" },
+    { "id": "inventory", "type": "service", "label": "InventoryModule", "tech": "estoque por variacao", "group": "dominio",
+      "description": "Debita e devolve estoque; unico dono da coluna stock_quantity.",
+      "comment": "Concorrencia real e baixa (dezenas/centenas de clientes), mas duas compras\nsimultaneas da ultima peca sao possiveis. Lock pessimista na variacao dentro\nda transacao do pedido + CHECK stock_quantity >= 0 no banco como rede final." },
+    { "id": "playlist", "type": "service", "label": "PlaylistModule", "tech": "faixas do player", "group": "dominio",
+      "description": "CRUD de faixas para o admin e listagem publica para o player. Fase 4." },
+    { "id": "uploads", "type": "service", "label": "UploadsModule", "tech": "Multer · sharp", "group": "dominio",
+      "description": "Recebe fotos de produto e arquivos de audio, normaliza e grava no volume." },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "tech": "TypeORM · abre o MER ›", "icon": "postgresql", "group": "dados",
+      "ref": "@mer-do-esquema-da-loja-glitch.json" },
+    { "id": "files", "type": "storage", "label": "Volume de midia", "tech": "/app/uploads", "group": "dados",
+      "description": "Fotos e audios servidos como estatico em /uploads.",
+      "comment": "E o unico estado fora do Postgres. Se o volume nao for persistente no deploy,\ntodas as fotos do catalogo somem no proximo container.\nMigrar para S3/objeto quando o catalogo passar de ~100 produtos." }
+  ],
+  "edges": [
+    { "from": "http", "to": "auth", "label": "login/cadastro", "animated": true },
+    { "from": "http", "to": "catalog", "label": "catalogo e admin", "animated": true },
+    { "from": "http", "to": "orders", "label": "pedidos", "animated": true },
+    { "from": "http", "to": "playlist", "label": "faixas" },
+    { "from": "http", "to": "uploads", "label": "multipart" },
+    { "from": "orders", "to": "inventory", "label": "debita/devolve", "animated": true },
+    { "from": "auth", "to": "db", "label": "sql" },
+    { "from": "catalog", "to": "db", "label": "sql" },
+    { "from": "orders", "to": "db", "label": "sql (transacao)" },
+    { "from": "inventory", "to": "db", "label": "sql (lock)" },
+    { "from": "playlist", "to": "db", "label": "sql" },
+    { "from": "uploads", "to": "files", "label": "grava arquivo" },
+    { "from": "catalog", "to": "files", "label": "le url da foto", "dashed": true }
+  ]
+}
