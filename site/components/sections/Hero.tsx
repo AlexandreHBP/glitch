@@ -12,6 +12,13 @@ const STATS = [
   { value: "50+", label: "Países" },
 ] as const;
 
+// Cabeçalho de boas-vindas da loja (RF01) — compacto de propósito: a home
+// de uma loja precisa mostrar categorias e produtos reais já na primeira
+// dobra, não um banner de página de divulgação. Por isso esta seção não
+// ocupa a tela inteira (sem min-h de viewport), o título e o texto são bem
+// menores que um hero de landing page, e as estatísticas viraram uma linha
+// discreta em vez de um bloco grande — o protagonismo visual é das seções
+// seguintes (categorias/coleção).
 export function Hero() {
   return (
     <section
@@ -52,7 +59,7 @@ export function Hero() {
         />
       </ParallaxSection>
 
-      <div className="container-section relative flex min-h-[80vh] flex-col justify-center py-20 sm:min-h-[85vh] sm:py-28">
+      <div className="container-section relative flex flex-col justify-center py-10 sm:py-14">
         <div className="max-w-2xl">
           <div className="flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-wine-bright" />
@@ -63,19 +70,18 @@ export function Hero() {
 
           <h1
             id="hero-title"
-            className="mt-6 font-display text-7xl uppercase leading-[0.9] tracking-tight text-bone sm:text-8xl lg:text-9xl"
+            className="mt-4 font-display text-4xl uppercase leading-[0.95] tracking-tight text-bone sm:text-5xl lg:text-6xl"
           >
             <GlitchText as="span" intensity="strong">
               GLITCH
             </GlitchText>
           </h1>
 
-          <p className="mt-6 max-w-xl text-balance text-base text-slate-300 animate-fade-up sm:text-lg [animation-delay:120ms]">
-            Moda sem filtro. GLITCH foi feita para todo corpo, toda expressão, todo
-            tamanho do XS ao 5XL — sem exceções, sem asteriscos.
+          <p className="mt-3 max-w-xl text-balance text-sm text-slate-300 animate-fade-up sm:text-base [animation-delay:120ms]">
+            Moda sem filtro, do XS ao 5XL — sem exceções, sem asteriscos.
           </p>
 
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row animate-fade-up [animation-delay:240ms]">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row animate-fade-up [animation-delay:240ms]">
             <Button size="lg" href="/produtos">
               Ver todos os tamanhos
             </Button>
@@ -87,12 +93,12 @@ export function Hero() {
             </Button>
           </div>
 
-          <dl className="mt-16 grid grid-cols-3 gap-6 border-t border-white/10 pt-8 animate-fade-up [animation-delay:320ms] sm:max-w-md">
+          <dl className="mt-6 flex flex-wrap gap-x-6 gap-y-2 animate-fade-up [animation-delay:320ms]">
             {STATS.map((stat) => (
-              <div key={stat.label}>
+              <div key={stat.label} className="flex items-baseline gap-1.5">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-display text-3xl text-bone sm:text-4xl">{stat.value}</dd>
-                <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">{stat.label}</p>
+                <dd className="font-display text-base text-bone">{stat.value}</dd>
+                <p className="text-xs uppercase tracking-wide text-slate-400">{stat.label}</p>
               </div>
             ))}
           </dl>

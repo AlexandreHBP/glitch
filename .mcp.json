@@ -4,6 +4,14 @@
       "type": "http",
       "url": "http://kanban.kanban.svc.cluster.local/api/mcp"
     },
+    "playwright": {
+      "type": "stdio",
+      "command": "playwright-mcp",
+      "args": [
+        "--cdp-endpoint",
+        "http://localhost:9222"
+      ]
+    },
     "postgres": {
       "type": "stdio",
       "command": "postgres-mcp",
@@ -13,14 +21,6 @@
       "env": {
         "DATABASE_URI": "${POSTGRES_URL}"
       }
-    },
-    "playwright": {
-      "type": "stdio",
-      "command": "playwright-mcp",
-      "args": [
-        "--cdp-endpoint",
-        "http://localhost:9222"
-      ]
     }
   }
 }
