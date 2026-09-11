@@ -59,7 +59,7 @@ export function Hero() {
         />
       </ParallaxSection>
 
-      <div className="container-section relative flex flex-col justify-center py-10 sm:py-14">
+      <div className="container-section relative flex flex-col justify-center py-16 sm:py-24 lg:py-28">
         <div className="max-w-2xl">
           <div className="flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-wine-bright" />
@@ -70,7 +70,7 @@ export function Hero() {
 
           <h1
             id="hero-title"
-            className="mt-4 font-display text-4xl uppercase leading-[0.95] tracking-tight text-bone sm:text-5xl lg:text-6xl"
+            className="mt-4 font-display text-7xl uppercase leading-[0.9] tracking-tight text-bone sm:text-8xl lg:text-9xl"
           >
             <GlitchText as="span" intensity="strong">
               GLITCH
