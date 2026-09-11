@@ -75,7 +75,10 @@ export default function RootLayout({
 
         <AppProviders>
           <Header />
-          <main id="main" tabIndex={-1} className="min-h-[60vh] pb-16 md:pb-0">
+          {/* pb-24: reserva espaço para o widget flutuante do player (RF10),
+              que agora é um disco de vinil fixo no canto inferior em
+              qualquer tamanho de tela — não só no mobile como antes. */}
+          <main id="main" tabIndex={-1} className="min-h-[60vh] pb-24">
             {children}
           </main>
           <Footer />

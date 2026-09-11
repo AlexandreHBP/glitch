@@ -59,3 +59,13 @@ export function coverImage(product: Product): ProductImage | null {
     [...product.images].sort((a, b) => a.position - b.position)[0]
   );
 }
+
+/**
+ * Tamanhos ativos do produto, sem repetição, na ordem em que o
+ * administrador cadastrou as variações (mesma convenção usada na página de
+ * detalhe, ver ProductPurchasePanel). Usado para mostrar as tags de
+ * tamanho (XS a 5XL, conforme cadastrado) direto no card da grade.
+ */
+export function activeSizes(product: Product): string[] {
+  return Array.from(new Set((product.variants ?? []).filter((v) => v.active).map((v) => v.size)));
+}

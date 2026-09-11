@@ -9,7 +9,8 @@ export default defineConfig(({ mode }) => {
   // dentro do próprio arquivo de config, é preciso carregar o .env
   // explicitamente com loadEnv (env vars reais do processo, se existirem,
   // continuam tendo prioridade sobre o arquivo).
-  const env = { ...loadEnv(mode, process.cwd(), ""), ...process.env };
+  const fileEnv = loadEnv(mode, process.cwd(), "");
+  const env = { ...fileEnv, ...process.env };
 
   return {
     plugins: [

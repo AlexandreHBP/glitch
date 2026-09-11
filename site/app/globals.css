@@ -163,6 +163,54 @@
   .black-sheep-bob {
     animation: sheepBob 0.5s ease-in-out infinite alternate;
   }
+
+  /* ────────────────────────────────────────────────────────────────────
+     Player de música em formato de disco de vinil (RF10). O disco só gira
+     enquanto `isPlaying` é verdadeiro (classe .is-spinning aplicada via
+     JS no MusicPlayer) — nasce sempre parado, coerente com RN04 (nunca
+     toca sozinho). `animation-play-state` troca sem reiniciar o ângulo
+     atual, então pausar/retomar não "salta" o disco.
+     ──────────────────────────────────────────────────────────────────── */
+  .vinyl-disc {
+    animation: vinylSpin 2.8s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .vinyl-disc.is-spinning {
+    animation-play-state: running;
+  }
+
+  .vinyl-tonearm {
+    transform-origin: 88% 12%;
+    transform: rotate(-18deg);
+    transition: transform 300ms ease;
+  }
+
+  .vinyl-tonearm.is-spinning {
+    transform: rotate(2deg);
+  }
+
+  /* ────────────────────────────────────────────────────────────────────
+     Textura "glitch" 100% CSS (sem imagem) usada como placeholder do
+     painel de campanha no Hero, enquanto fotos reais de modelos não
+     existem (ver comentário em components/sections/Hero.tsx).
+     ──────────────────────────────────────────────────────────────────── */
+  .bg-noise-glitch {
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 229, 255, 0.06) 0px,
+        rgba(0, 229, 255, 0.06) 1px,
+        transparent 1px,
+        transparent 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 0, 60, 0.05) 0px,
+        rgba(255, 0, 60, 0.05) 1px,
+        transparent 1px,
+        transparent 5px
+      );
+  }
 }
 
 @layer utilities {
@@ -248,5 +296,14 @@
   }
   100% {
     transform: translateY(-3px);
+  }
+}
+
+@keyframes vinylSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

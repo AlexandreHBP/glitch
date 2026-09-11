@@ -1,4 +1,27 @@
 import type { NextConfig } from "next";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+// A plataforma de hospedagem injeta valores genéricos de algumas variáveis
+// NEXT_PUBLIC_* diretamente no ambiente (ex.: NEXT_PUBLIC_SITE_NAME="My LP"),
+// e o Next.js nunca sobrescreve uma variável já definida no processo com o
+// valor de .env.local — então o nome genérico "vencia" o nome real da marca.
+// Sobrescrevemos aqui manualmente só as chaves abaixo, lidas diretamente do
+// .env.local do projeto, antes de qualquer código da aplicação rodar.
+function overrideFromEnvLocal(keys: string[]) {
+  const envLocalPath = join(process.cwd(), ".env.local");
+  if (!existsSync(envLocalPath)) return;
+  const contents = readFileSync(envLocalPath, "utf8");
+  for (const line of contents.split("\n")) {
+    const match = /^([\w.-]+)\s*=\s*(.*)$/.exec(line.trim());
+    if (!match) continue;
+    const [, key, rawValue] = match;
+    if (!keys.includes(key)) continue;
+    process.env[key] = rawValue.trim().replace(/^(['"])(.*)\1$/, "$2");
+  }
+}
+
+overrideFromEnvLocal(["NEXT_PUBLIC_SITE_NAME"]);
 
 // Fotos de produto vêm do backend (uploads servidos na raiz, fora do
 // prefixo /api/v1 — ver lib/media.ts). O hostname permitido no otimizador
