@@ -20,6 +20,7 @@ import {
   type ReactNode,
 } from "react";
 import { playlistApi } from "@/lib/api";
+import { resolveMediaUrl } from "@/lib/media";
 import type { PlaylistTrack } from "@/types/playlist";
 
 const STORAGE_KEY = "glitch.player";
@@ -189,7 +190,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       {/* eslint-disable-next-line jsx-a11y/media-has-caption -- música ambiente instrumental, sem faixa de legenda aplicável */}
       <audio
         ref={audioRef}
-        src={currentTrack?.url}
+        src={resolveMediaUrl(currentTrack?.url)}
         preload="none"
         onEnded={() => setIsPlaying(false)}
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
