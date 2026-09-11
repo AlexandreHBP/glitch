@@ -53,7 +53,7 @@ export function Header() {
             ◆
           </span>
           <GlitchText as="span" intensity="strong" className="font-display text-lg uppercase tracking-widest">
-            {siteConfig.name}
+            {siteConfig.wordmark}
           </GlitchText>
         </Link>
 

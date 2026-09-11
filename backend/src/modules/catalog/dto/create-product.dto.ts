@@ -4,6 +4,7 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -15,6 +16,7 @@ import {
 } from 'class-validator';
 import { CreateVariantDto } from './create-variant.dto';
 import { ProductImageDto } from './product-image.dto';
+import { ProductStyleTag } from '../enums/product-style-tag.enum';
 
 export class CreateProductDto {
   @ApiProperty({ example: 'Camiseta Glitch Oversized' })
@@ -42,6 +44,17 @@ export class CreateProductDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  @ApiPropertyOptional({
+    description:
+      'Atributos de estilo (mockup): fluido de gênero, unissex, corte adaptável, todos os corpos, lançamento',
+    enum: ProductStyleTag,
+    isArray: true,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsEnum(ProductStyleTag, { each: true })
+  styleTags?: ProductStyleTag[];
 
   @ApiProperty({ type: [CreateVariantDto] })
   @IsArray()

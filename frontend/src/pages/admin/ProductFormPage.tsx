@@ -25,11 +25,20 @@ import TextArea from "../../components/form/input/TextArea";
 import FileInput from "../../components/form/input/FileInput";
 import Select from "../../components/form/Select";
 import Switch from "../../components/form/switch/Switch";
+import Checkbox from "../../components/form/input/Checkbox";
 import { productService } from "../../services/productService";
 import { categoryService } from "../../services/categoryService";
 import { uploadService } from "../../services/uploadService";
 import { getErrorMessage, resolveFileUrl } from "../../services/api";
-import type { Product } from "../../types/product.types";
+import {
+  ProductStyleTag,
+  PRODUCT_STYLE_TAG_LABELS,
+  type Product,
+} from "../../types/product.types";
+
+// Ordem fixa de exibição dos 5 atributos de estilo do mockup (filtros da
+// home do site) — mesmos rótulos usados em PRODUCT_STYLE_TAG_LABELS.
+const STYLE_TAG_OPTIONS = Object.values(ProductStyleTag);
 
 // Nota: os campos numéricos (basePrice, stockQuantity) são registrados no
 // react-hook-form com `valueAsNumber: true`, então o schema já os declara
@@ -55,6 +64,7 @@ const productSchema = z.object({
   basePrice: z.number({ message: "Informe o preço" }).min(0, "O preço não pode ser negativo"),
   categoryId: z.string().optional(),
   active: z.boolean(),
+  styleTags: z.array(z.nativeEnum(ProductStyleTag)),
   variants: z.array(variantSchema).min(1, "Cadastre ao menos uma variação (tamanho/cor)"),
 });
 
@@ -67,6 +77,7 @@ function toFormValues(product: Product): ProductFormValues {
     basePrice: product.basePrice,
     categoryId: product.categoryId ?? "",
     active: product.active,
+    styleTags: product.styleTags ?? [],
     variants: product.variants.map((variant) => ({
       size: variant.size,
       color: variant.color,
@@ -123,6 +134,7 @@ export default function ProductFormPage() {
       basePrice: 0,
       categoryId: "",
       active: true,
+      styleTags: [],
       variants: [emptyVariant],
     },
   });
@@ -153,6 +165,7 @@ export default function ProductFormPage() {
         basePrice: values.basePrice,
         categoryId: values.categoryId || undefined,
         active: values.active,
+        styleTags: values.styleTags,
         variants: values.variants.map((variant) => ({
           size: variant.size,
           color: variant.color,
@@ -300,6 +313,33 @@ export default function ProductFormPage() {
                     checked={field.value}
                     onChange={field.onChange}
                   />
+                )}
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <Label>Atributos de estilo (filtros da home do site)</Label>
+              <Controller
+                control={control}
+                name="styleTags"
+                render={({ field }) => (
+                  <div className="mt-1 flex flex-wrap gap-x-6 gap-y-3">
+                    {STYLE_TAG_OPTIONS.map((tag) => (
+                      <Checkbox
+                        key={tag}
+                        id={`styleTags-${tag}`}
+                        label={PRODUCT_STYLE_TAG_LABELS[tag]}
+                        checked={field.value.includes(tag)}
+                        onChange={(checked) =>
+                          field.onChange(
+                            checked
+                              ? [...field.value, tag]
+                              : field.value.filter((value) => value !== tag)
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
                 )}
               />
             </div>

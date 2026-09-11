@@ -20,6 +20,19 @@ export type ProductImage = {
   position: number;
 };
 
+/**
+ * Atributos de estilo do mockup de referência (filtros em pílula da seção
+ * "A Coleção"). Espelha
+ * backend/src/modules/catalog/enums/product-style-tag.enum.ts.
+ */
+export enum ProductStyleTag {
+  GENDER_FLUID = "fluido_genero",
+  UNISEX = "unissex",
+  ADAPTIVE_FIT = "corte_adaptavel",
+  ALL_BODIES = "todos_os_corpos",
+  NEW_RELEASE = "lancamento",
+}
+
 export type ProductVariant = {
   id: string;
   productId: string;
@@ -41,6 +54,7 @@ export type Product = {
   categoryId: string | null;
   category: Category | null;
   active: boolean;
+  styleTags: ProductStyleTag[];
   images: ProductImage[];
   variants: ProductVariant[];
   createdAt: string;

@@ -2,8 +2,7 @@
  * Seção "A Coleção" da home (RF01) — mesma vitrine de "últimas peças" de
  * antes (fetch no servidor, bom para SEO/LCP), agora com o cabeçalho e os
  * filtros de estilo em pílula do mockup de referência. A filtragem em si
- * mora em CollectionFilterPills (client component) — ver comentário lá
- * sobre a limitação dos rótulos de estilo.
+ * (por `styleTags`) mora em CollectionFilterPills (client component).
  */
 import Link from "next/link";
 import { CollectionFilterPills } from "@/components/catalog/CollectionFilterPills";

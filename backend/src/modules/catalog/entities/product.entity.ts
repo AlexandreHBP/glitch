@@ -18,6 +18,7 @@ import { ColumnNumericTransformer } from '../../../common/transformers/column-nu
 import { Category } from './category.entity';
 import { ProductVariant } from './product-variant.entity';
 import { ProductImage } from './product-image.entity';
+import { ProductStyleTag } from '../enums/product-style-tag.enum';
 
 @Entity('products')
 @Index('idx_products_active_category', ['active', 'categoryId'])
@@ -53,6 +54,12 @@ export class Product {
 
   @Column({ type: 'boolean', default: true })
   active: boolean;
+
+  // Atributos de estilo do mockup (fluido de gênero, unissex, corte
+  // adaptável, todos os corpos, lançamento) usados pelas pílulas de filtro
+  // da home. Array vazio = produto sem nenhuma tag de estilo marcada.
+  @Column({ name: 'style_tags', type: 'text', array: true, default: '{}' })
+  styleTags: ProductStyleTag[];
 
   @OneToMany(() => ProductVariant, (variant) => variant.product)
   variants: ProductVariant[];

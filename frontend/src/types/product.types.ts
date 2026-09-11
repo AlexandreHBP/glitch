@@ -4,6 +4,26 @@
  */
 import type { PaginationQuery } from "./pagination.types";
 
+/**
+ * Atributos de estilo do mockup de referência (filtros da home do site).
+ * Espelha backend/src/modules/catalog/enums/product-style-tag.enum.ts.
+ */
+export enum ProductStyleTag {
+  GENDER_FLUID = "fluido_genero",
+  UNISEX = "unissex",
+  ADAPTIVE_FIT = "corte_adaptavel",
+  ALL_BODIES = "todos_os_corpos",
+  NEW_RELEASE = "lancamento",
+}
+
+export const PRODUCT_STYLE_TAG_LABELS: Record<ProductStyleTag, string> = {
+  [ProductStyleTag.GENDER_FLUID]: "Fluido de Gênero",
+  [ProductStyleTag.UNISEX]: "Unissex",
+  [ProductStyleTag.ADAPTIVE_FIT]: "Corte Adaptável",
+  [ProductStyleTag.ALL_BODIES]: "Todos os Corpos",
+  [ProductStyleTag.NEW_RELEASE]: "Lançamento",
+};
+
 export interface Category {
   id: string;
   name: string;
@@ -45,6 +65,7 @@ export interface Product {
   categoryId: string | null;
   category: Category | null;
   active: boolean;
+  styleTags: ProductStyleTag[];
   variants: ProductVariant[];
   images: ProductImage[];
   createdAt: string;
@@ -72,6 +93,7 @@ export interface CreateProductPayload {
   basePrice: number;
   categoryId?: string;
   active?: boolean;
+  styleTags?: ProductStyleTag[];
   variants: CreateVariantPayload[];
   images?: ProductImagePayload[];
 }

@@ -4,11 +4,11 @@
  * nunca é remontada ao trocar de rota. Estrutura e copy seguem o mockup de
  * referência da home (3 colunas de links + ícones sociais + linha final).
  *
- * IMPORTANTE (flag para o Alexandre revisar): "Nosso Manifesto", "Guia de
- * Medidas", "Acessibilidade", "Sustentabilidade" e "Envio & Trocas" ainda
- * não têm página própria no site — apontam para o e-mail de contato como
- * solução provisória, em vez de um link morto. Quando o conteúdo dessas
- * páginas existir, troque o href pela rota real.
+ * "Nosso Manifesto", "Guia de Medidas", "Acessibilidade", "Sustentabilidade"
+ * e "Envio & Trocas" agora têm página própria (ver site/app/manifesto,
+ * /guia-de-medidas, /acessibilidade, /sustentabilidade, /envio-e-trocas) —
+ * o conteúdo delas ainda é rascunho provisório (ver ProvisionalNotice em
+ * cada página), mas o link deixou de ser mailto:.
  */
 import Link from "next/link";
 import { BlackSheep } from "@/components/glitch/BlackSheep";
@@ -30,17 +30,17 @@ const columns = [
   {
     title: "Sobre",
     links: [
-      { label: "Nosso Manifesto", href: contactHref },
-      { label: "Guia de Medidas", href: contactHref },
-      { label: "Acessibilidade", href: contactHref },
-      { label: "Sustentabilidade", href: contactHref },
+      { label: "Nosso Manifesto", href: "/manifesto" },
+      { label: "Guia de Medidas", href: "/guia-de-medidas" },
+      { label: "Acessibilidade", href: "/acessibilidade" },
+      { label: "Sustentabilidade", href: "/sustentabilidade" },
     ],
   },
   {
     title: "Ajuda",
     links: [
-      { label: "Envio & Trocas", href: contactHref },
-      { label: "Guia de Medidas", href: contactHref },
+      { label: "Envio & Trocas", href: "/envio-e-trocas" },
+      { label: "Guia de Medidas", href: "/guia-de-medidas" },
       { label: "Fale Conosco", href: contactHref },
     ],
   },
@@ -61,7 +61,7 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <GlitchText as="span" intensity="subtle" className="font-display text-2xl uppercase tracking-widest">
-                {siteConfig.name}
+                {siteConfig.wordmark}
               </GlitchText>
             </Link>
             <p className="mt-4 max-w-xs text-sm text-slate-400">

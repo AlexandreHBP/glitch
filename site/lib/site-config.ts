@@ -9,6 +9,11 @@
 export const siteConfig = {
   name: process.env.NEXT_PUBLIC_SITE_NAME || "Glitch",
   shortName: "Glitch",
+  // Wordmark estilizado do logo (header/footer), com o "I" trocado por "1"
+  // — efeito "hacker/alternativo" do mockup de referência. Usado só na
+  // marca visual (GlitchText); nome da marca em copy/metadados continua
+  // "Glitch" (`siteConfig.name`), sem o "1".
+  wordmark: "GL1TCH",
   url:
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     "http://localhost:3001",
