@@ -1,6 +1,16 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { GlitchText } from "@/components/glitch/GlitchText";
 import { ParallaxSection } from "@/components/glitch/ParallaxSection";
+
+// Fotos de campanha (banco de imagens gratuito para uso comercial, sem
+// exigência de atribuição — licença Unsplash). Ver origem de cada uma no
+// changelog/PR que introduziu este arquivo. Arquivos em public/hero/.
+const CAMPAIGN_PHOTOS = [
+  { src: "/hero/hero-1.jpg", alt: "Retrato em clima escuro e urbano, estética alternativa" },
+  { src: "/hero/hero-2.jpg", alt: "Pessoa com piercings e moletom preto, estética alternativa" },
+  { src: "/hero/hero-3.jpg", alt: "Look streetwear preto em cenário urbano" },
+] as const;
 
 // TODO(Alexandre): números de exemplo do mockup de referência, não dados
 // reais da loja (que está começando agora). Troque pelos números reais
@@ -26,23 +36,30 @@ export function Hero() {
       className="relative isolate overflow-hidden border-b border-white/5"
       aria-labelledby="hero-title"
     >
-      {/*
-        TODO(Alexandre): este grid de 3 colunas é só um placeholder de
-        estilo (gradiente + textura, sem fotos) — o mockup de referência
-        mostra 3 fotos reais de campanha (modelos diversos vestindo a
-        coleção). Não geramos/inventamos fotos de pessoas aqui: assim que
-        você tiver os arquivos originais da campanha (com direito de uso),
-        substitua este bloco por <Image> apontando para as 3 fotos, mantendo
-        o overlay escuro para a legibilidade do texto por cima.
-      */}
       <div
         className="absolute inset-0 -z-20 grid grid-cols-3"
         role="img"
-        aria-label="Espaço reservado para 3 fotos da campanha Glitch, com modelos diversos vestindo a coleção — imagens serão adicionadas em breve."
+        aria-label="Fotos de campanha Glitch, estética alternativa e urbana"
       >
-        <div className="border-r border-black/50 bg-gradient-to-b from-slate-800 via-ink to-black" />
-        <div className="border-r border-black/50 bg-gradient-to-b from-wine-deep via-ink to-black" />
-        <div className="bg-gradient-to-b from-slate-800 via-ink to-black" />
+        {CAMPAIGN_PHOTOS.map((photo, index) => (
+          <div
+            key={photo.src}
+            className={
+              index < CAMPAIGN_PHOTOS.length - 1
+                ? "relative border-r border-black/50"
+                : "relative"
+            }
+          >
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              fill
+              priority={index === 0}
+              sizes="33vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
 
       {/* Overlay escuro (mais forte à esquerda, onde fica o texto) + textura

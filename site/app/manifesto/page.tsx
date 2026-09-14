@@ -23,7 +23,7 @@ export default function ManifestoPage() {
       <ContentPageHeader
         eyebrow="Sobre a Glitch"
         title="Nosso Manifesto"
-        description="Roupa com falha de propósito — para quem não cabe (e não quer caber) nos padrões."
+        description="Estilo fora do padrão, de propósito — para quem não cabe (e não quer caber) nos padrões."
       />
 
       <div className="mt-12 max-w-2xl space-y-10">

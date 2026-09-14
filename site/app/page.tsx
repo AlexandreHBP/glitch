@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Collection } from "@/components/sections/Collection";
 import { Features } from "@/components/sections/Features";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { ManifestoSection } from "@/components/sections/ManifestoSection";
 import { CTA } from "@/components/sections/CTA";
 import { FAQ } from "@/components/sections/FAQ";
 import { buildMetadata } from "@/lib/seo";
@@ -26,6 +27,7 @@ export default function HomePage() {
       <Collection />
       <Features />
       <HowItWorks />
+      <ManifestoSection />
       <CTA />
       <FAQ />
     </>

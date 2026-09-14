@@ -13,7 +13,7 @@ export function CTA() {
 
           <h2 id="cta-title" className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             <GlitchText as="span" intensity="subtle">
-              Pronto pra vestir a falha?
+              Pronto pra vestir o seu glitch?
             </GlitchText>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-balance text-base text-slate-300">

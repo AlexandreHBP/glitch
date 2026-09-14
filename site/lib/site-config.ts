@@ -19,7 +19,7 @@ export const siteConfig = {
     "http://localhost:3001",
   description:
     "Glitch é uma loja de roupas com estética alternativa: catálogo com tamanhos e cores, conta de cliente, pedido direto pelo site e pagamento combinado com o vendedor.",
-  tagline: "Roupa com falha de propósito.",
+  tagline: "Estilo fora do padrão, de propósito.",
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "pt_BR",
   language: "pt-BR",
   keywords: [
