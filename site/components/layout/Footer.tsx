@@ -11,8 +11,8 @@
  * cada página), mas o link deixou de ser mailto:.
  */
 import Link from "next/link";
+import Image from "next/image";
 import { BlackSheep } from "@/components/glitch/BlackSheep";
-import { GlitchText } from "@/components/glitch/GlitchText";
 import { siteConfig } from "@/lib/site-config";
 
 const contactHref = `mailto:${siteConfig.contact.email}`;
@@ -60,9 +60,13 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-4">
           <div>
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <GlitchText as="span" intensity="subtle" className="font-display text-2xl uppercase tracking-widest">
-                {siteConfig.wordmark}
-              </GlitchText>
+              <Image
+                src="/brand/glitch-logo.png"
+                alt={siteConfig.wordmark}
+                width={160}
+                height={80}
+                className="h-10 w-auto"
+              />
             </Link>
             <p className="mt-4 max-w-xs text-sm text-slate-400">
               Moda alternativa para todo corpo, toda expressão. Sem concessões.

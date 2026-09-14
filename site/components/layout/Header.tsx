@@ -6,9 +6,9 @@
  * (useAuth), contagem do carrinho (useCart) e do menu mobile.
  */
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { GlitchText } from "@/components/glitch/GlitchText";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { siteConfig } from "@/lib/site-config";
@@ -52,9 +52,14 @@ export function Header() {
           >
             ◆
           </span>
-          <GlitchText as="span" intensity="strong" className="font-display text-lg uppercase tracking-widest">
-            {siteConfig.wordmark}
-          </GlitchText>
+          <Image
+            src="/brand/glitch-logo.png"
+            alt={siteConfig.wordmark}
+            width={140}
+            height={70}
+            priority
+            className="h-8 w-auto"
+          />
         </Link>
 
         <ul className="hidden items-center gap-8 text-sm uppercase tracking-wide text-slate-300 md:flex">
