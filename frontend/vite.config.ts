@@ -2,6 +2,19 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 
+// A plataforma de hospedagem injeta VITE_API_URL/VITE_API_ORIGIN genéricos
+// diretamente no processo (ex.: sem o prefixo de versão "/v1" que a nossa
+// API exige). O Vite SEMPRE prioriza uma variável já presente em
+// process.env sobre o .env do projeto ao montar import.meta.env — esse é
+// um comportamento interno dele, não contornável via `define` (testado:
+// `define` não se aplica ao namespace especial import.meta.env em modo
+// dev). A única forma confiável de fazer o valor real do .env prevalecer
+// é remover essas duas chaves do processo ANTES do Vite montar
+// import.meta.env — como este arquivo é carregado antes do dev server
+// subir, isso garante que ele sempre caia de volta no .env do projeto.
+delete process.env.VITE_API_URL;
+delete process.env.VITE_API_ORIGIN;
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   // process.env não é populado automaticamente a partir de .env — isso só
