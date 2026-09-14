@@ -1,25 +1,16 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
-import { ProvisionalNotice } from "@/components/content/ProvisionalNotice";
 import { ContentPageHeader } from "@/components/content/ContentPageHeader";
 
-// TODO(Alexandre): página criada como rascunho de estrutura para resolver o
-// link morto do rodapé ("Nosso Manifesto" apontava para mailto:). Substitua
-// os textos abaixo pelo manifesto real da marca (por que a Glitch existe,
-// o que ela recusa, para quem ela é) e então remova <ProvisionalNotice />
-// e este comentário.
 export const metadata: Metadata = buildMetadata({
   title: "Nosso Manifesto",
   description: "O que a Glitch defende e por que a marca existe.",
   path: "/manifesto",
-  noIndex: true,
 });
 
 export default function ManifestoPage() {
   return (
     <div className="container-section py-16 sm:py-20">
-      <ProvisionalNotice />
-
       <ContentPageHeader
         eyebrow="Sobre a Glitch"
         title="Nosso Manifesto"
@@ -32,8 +23,12 @@ export default function ManifestoPage() {
             Por que existimos
           </h2>
           <p className="mt-3 leading-relaxed text-slate-300">
-            [TODO(Alexandre): escreva aqui, com suas palavras, por que a Glitch foi criada — a
-            lacuna que você viu no mercado de moda alternativa e o que te fez começar.]
+            Glitch é aquele instante em que o sistema falha e, por um segundo, mostra o que tem por
+            trás da tela perfeita. A gente decidiu vestir esse instante. Nascemos porque a moda
+            alternativa continuava reproduzindo os mesmos padrões que dizia recusar: uma grade de
+            tamanhos que para no G, uma ideia fixa de como um corpo &quot;deveria&quot; vestir uma
+            roupa. A Glitch existe pra transformar a falha em estética — pra dizer que sair do
+            padrão não é um defeito a esconder, é a coisa mais interessante que você tem.
           </p>
         </section>
 
@@ -42,8 +37,12 @@ export default function ManifestoPage() {
             O que recusamos
           </h2>
           <p className="mt-3 leading-relaxed text-slate-300">
-            [TODO(Alexandre): liste os padrões da indústria da moda que a Glitch rejeita —
-            tamanho único, estética padronizada, o que fizer sentido pra marca.]
+            Recusamos tamanho único e a ideia de que existe um jeito &quot;certo&quot; de se vestir.
+            Recusamos separar roupa por gênero como se estilo tivesse que escolher um lado.
+            Recusamos tratar quem foge do padrão como exceção, promoção especial ou nota de rodapé
+            — e recusamos, principalmente, a ideia de que ser diferente é uma falha a ser
+            corrigida. A ovelha negra do nosso rodapé não está fugindo do rebanho por engano: ela
+            escolheu esse caminho.
           </p>
         </section>
 
@@ -52,8 +51,11 @@ export default function ManifestoPage() {
             Para quem fazemos
           </h2>
           <p className="mt-3 leading-relaxed text-slate-300">
-            [TODO(Alexandre): descreva quem é o público da Glitch — todo corpo, toda expressão, sem
-            concessões — com exemplos concretos se fizer sentido.]
+            Fazemos moda pra todo corpo e toda expressão de gênero, do XS ao 5XL, sem exceções e
+            sem asteriscos no meio do caminho. É pra quem já ouviu que não tinha o tipo de corpo
+            &quot;certo&quot; pra determinada peça, pra quem não se vê representado nas prateleiras
+            binárias, e pra quem simplesmente entende estilo alternativo como identidade, não
+            fantasia. Se você já se sentiu a ovelha negra em algum lugar, essa marca é sua.
           </p>
         </section>
 
@@ -62,8 +64,11 @@ export default function ManifestoPage() {
             Nossos compromissos
           </h2>
           <p className="mt-3 leading-relaxed text-slate-300">
-            [TODO(Alexandre): se houver compromissos concretos — produção, materiais, comunidade —
-            descreva-os aqui. Evite promessas que a operação atual não sustenta.]
+            Comprometemo-nos a manter e expandir a faixa de tamanhos conforme a coleção cresce, a
+            desenhar peças pensando em corpos e expressões de gênero diversas desde o início — não
+            como adaptação posterior —, e a ouvir de verdade quem veste a marca. Somos um projeto
+            em construção: à medida que a Glitch cresce, vamos detalhando aqui, com transparência,
+            nossos compromissos de produção e sustentabilidade.
           </p>
         </section>
       </div>
