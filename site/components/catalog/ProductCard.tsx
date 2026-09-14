@@ -42,11 +42,6 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             Esgotado
           </span>
         )}
-        {product.category && (
-          <span className="absolute right-2 top-2 rounded-full bg-black/60 px-2.5 py-1 text-[11px] text-slate-200 backdrop-blur">
-            {product.category.name}
-          </span>
-        )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <h3 className="text-sm font-semibold text-white sm:text-base">{product.name}</h3>

@@ -1,13 +1,13 @@
 /**
- * Catálogo (RF01) — grade responsiva e paginada, com filtro por categoria
- * e busca. Fetch inicial no servidor (bom para SEO); os filtros são
- * aplicados via query params, então a própria navegação (Link/router.push)
- * já refaz o fetch no servidor a cada mudança.
+ * Catálogo (RF01) — grade responsiva e paginada, com busca. Fetch inicial
+ * no servidor (bom para SEO); os filtros são aplicados via query params,
+ * então a própria navegação (Link/router.push) já refaz o fetch no
+ * servidor a cada mudança. Sem filtro de categoria de propósito: a loja
+ * vende só camisetas (pedido do Alexandre).
  */
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { productsApi } from "@/lib/api/products";
-import { categoriesApi } from "@/lib/api/categories";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { ProductFilters } from "@/components/catalog/ProductFilters";
 import { Pagination } from "@/components/catalog/Pagination";
@@ -22,19 +22,15 @@ export const metadata: Metadata = buildMetadata({
 const PAGE_SIZE = 12;
 
 type CatalogPageProps = {
-  searchParams: Promise<{ pagina?: string; categoria?: string; busca?: string }>;
+  searchParams: Promise<{ pagina?: string; busca?: string }>;
 };
 
 export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const resolvedParams = await searchParams;
   const page = Number(resolvedParams.pagina ?? "1") || 1;
-  const categoryId = resolvedParams.categoria;
   const search = resolvedParams.busca;
 
-  const [productsResult, categories] = await Promise.all([
-    productsApi.list({ page, limit: PAGE_SIZE, categoryId, search }, 15),
-    categoriesApi.list(),
-  ]);
+  const productsResult = await productsApi.list({ page, limit: PAGE_SIZE, search }, 15);
 
   return (
     <div className="container-section py-16 sm:py-20">
@@ -51,14 +47,12 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         </p>
       </header>
 
-      <ProductFilters categories={categories} />
+      <ProductFilters />
 
       {productsResult.data.length === 0 ? (
         <div className="mt-16 rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center">
           <p className="text-lg font-semibold text-white">Nenhum produto encontrado</p>
-          <p className="mt-2 text-sm text-slate-400">
-            Tente outra busca ou remova o filtro de categoria.
-          </p>
+          <p className="mt-2 text-sm text-slate-400">Tente outra busca.</p>
         </div>
       ) : (
         <ul role="list" className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
@@ -74,7 +68,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         page={productsResult.page}
         totalPages={productsResult.totalPages}
         basePath="/produtos"
-        searchParams={{ categoria: categoryId, busca: search }}
+        searchParams={{ busca: search }}
       />
     </div>
   );

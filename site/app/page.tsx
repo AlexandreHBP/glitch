@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
-import { CategoryShowcase } from "@/components/sections/CategoryShowcase";
 import { Collection } from "@/components/sections/Collection";
 import { Features } from "@/components/sections/Features";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -14,15 +13,16 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
 });
 
-// Home como vitrine de loja (não landing page institucional): categorias e
-// produtos reais logo no topo, vindos da API, antes de qualquer conteúdo
-// de texto sobre a marca. Features/HowItWorks/FAQ continuam depois, como
-// reforço de confiança para quem ainda está decidindo comprar.
+// Home como vitrine de loja (não landing page institucional): produtos
+// reais logo no topo, vindos da API, antes de qualquer conteúdo de texto
+// sobre a marca. Features/HowItWorks/FAQ continuam depois, como reforço de
+// confiança para quem ainda está decidindo comprar. Sem navegação por
+// categoria: a loja vende só camisetas, então uma única categoria não
+// justifica esse nível de navegação (pedido do Alexandre).
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <CategoryShowcase />
       <Collection />
       <Features />
       <HowItWorks />

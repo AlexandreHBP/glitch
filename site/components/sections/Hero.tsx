@@ -13,12 +13,12 @@ const STATS = [
 ] as const;
 
 // Cabeçalho de boas-vindas da loja (RF01) — compacto de propósito: a home
-// de uma loja precisa mostrar categorias e produtos reais já na primeira
-// dobra, não um banner de página de divulgação. Por isso esta seção não
-// ocupa a tela inteira (sem min-h de viewport), o título e o texto são bem
-// menores que um hero de landing page, e as estatísticas viraram uma linha
-// discreta em vez de um bloco grande — o protagonismo visual é das seções
-// seguintes (categorias/coleção).
+// de uma loja precisa mostrar produtos reais já na primeira dobra, não um
+// banner de página de divulgação. Por isso esta seção não ocupa a tela
+// inteira (sem min-h de viewport), o título e o texto são bem menores que
+// um hero de landing page, e as estatísticas viraram uma linha discreta em
+// vez de um bloco grande — o protagonismo visual é da seção seguinte
+// (coleção).
 export function Hero() {
   return (
     <section
