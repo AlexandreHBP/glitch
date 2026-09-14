@@ -190,7 +190,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       {/* eslint-disable-next-line jsx-a11y/media-has-caption -- música ambiente instrumental, sem faixa de legenda aplicável */}
       <audio
         ref={audioRef}
-        src={resolveMediaUrl(currentTrack?.url)}
+        src={currentTrack?.url ? resolveMediaUrl(currentTrack.url) : undefined}
         preload="none"
         onEnded={() => setIsPlaying(false)}
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
