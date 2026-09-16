@@ -29,6 +29,7 @@ export class CreateProductUseCase implements CreateProduct {
         categoryId: dto.categoryId ?? null,
         active: dto.active ?? true,
         styleTags: dto.styleTags ?? [],
+        model3dUrl: dto.model3dUrl ?? null,
         slug,
       });
       await manager.save(Product, product);

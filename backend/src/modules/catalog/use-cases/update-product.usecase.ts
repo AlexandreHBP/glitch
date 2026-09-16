@@ -46,6 +46,9 @@ export class UpdateProductUseCase implements UpdateProduct {
       if (dto.styleTags !== undefined) {
         product.styleTags = dto.styleTags;
       }
+      if (dto.model3dUrl !== undefined) {
+        product.model3dUrl = dto.model3dUrl;
+      }
       await manager.save(Product, product);
 
       if (dto.variants) {

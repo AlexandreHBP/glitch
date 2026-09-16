@@ -73,4 +73,14 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => ProductImageDto)
   images?: ProductImageDto[];
+
+  @ApiPropertyOptional({
+    description:
+      'URL do modelo 3D (.glb) já hospedado via POST /admin/uploads/model3d',
+    example: '/uploads/models3d/1f2e3d4c.glb',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  model3dUrl?: string;
 }

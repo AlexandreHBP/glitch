@@ -66,6 +66,7 @@ export interface Product {
   category: Category | null;
   active: boolean;
   styleTags: ProductStyleTag[];
+  model3dUrl: string | null;
   variants: ProductVariant[];
   images: ProductImage[];
   createdAt: string;
@@ -96,10 +97,14 @@ export interface CreateProductPayload {
   styleTags?: ProductStyleTag[];
   variants: CreateVariantPayload[];
   images?: ProductImagePayload[];
+  model3dUrl?: string;
 }
 
-export type UpdateProductPayload = Partial<Omit<CreateProductPayload, "variants">> & {
+export type UpdateProductPayload = Partial<Omit<CreateProductPayload, "variants" | "model3dUrl">> & {
   variants?: CreateVariantPayload[];
+  // Null explícito remove o modelo 3D já vinculado ao produto (ver
+  // UpdateProductDto no backend, que redeclara o campo para aceitar null).
+  model3dUrl?: string | null;
 };
 
 export interface ProductListQuery extends PaginationQuery {

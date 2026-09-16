@@ -61,6 +61,16 @@ export class Product {
   @Column({ name: 'style_tags', type: 'text', array: true, default: '{}' })
   styleTags: ProductStyleTag[];
 
+  // Modelo 3D giratório do produto (.glb), enviado via
+  // POST /admin/uploads/model3d. Nulo = site mostra só as fotos.
+  @Column({
+    name: 'model_3d_url',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  model3dUrl: string | null;
+
   @OneToMany(() => ProductVariant, (variant) => variant.product)
   variants: ProductVariant[];
 

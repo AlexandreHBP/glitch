@@ -69,6 +69,23 @@ async function bootstrap() {
   app.use(helmet());
   app.disable('x-powered-by');
 
+  // CORS também precisa vir ANTES de `useStaticAssets`, pelo mesmo motivo:
+  // `express.static` responde e encerra a requisição sozinho, sem passar
+  // pelo middleware de CORS se ele for registrado depois. Isso não
+  // quebrava fotos (<img src>) nem áudio (<audio src>) porque tags HTML
+  // passivas não exigem CORS — mas o visualizador 3D (<model-viewer>) faz
+  // `fetch()` de verdade para baixar o .glb, e o navegador bloqueia a
+  // leitura da resposta sem o header Access-Control-Allow-Origin quando o
+  // site e a API estão em origens diferentes.
+  const allowedOrigins = (
+    process.env.CORS_ALLOWED_ORIGINS ??
+    'http://localhost:5173,http://localhost:3001'
+  )
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.enableCors({ origin: allowedOrigins, credentials: true });
+
   const uploadsDir = process.env.UPLOADS_DIR
     ? path.resolve(process.env.UPLOADS_DIR)
     : path.resolve(process.cwd(), 'uploads');
@@ -80,15 +97,6 @@ async function bootstrap() {
       res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
     },
   });
-
-  const allowedOrigins = (
-    process.env.CORS_ALLOWED_ORIGINS ??
-    'http://localhost:5173,http://localhost:3001'
-  )
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-  app.enableCors({ origin: allowedOrigins, credentials: true });
 
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });

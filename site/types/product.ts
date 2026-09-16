@@ -55,6 +55,8 @@ export type Product = {
   category: Category | null;
   active: boolean;
   styleTags: ProductStyleTag[];
+  /** Modelo 3D giratório (.glb) do produto; null = site mostra só as fotos. */
+  model3dUrl: string | null;
   images: ProductImage[];
   variants: ProductVariant[];
   createdAt: string;

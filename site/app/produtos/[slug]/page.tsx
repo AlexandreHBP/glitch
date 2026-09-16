@@ -64,7 +64,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <ProductGallery images={product.images} productName={product.name} />
+        <ProductGallery images={product.images} productName={product.name} model3dUrl={product.model3dUrl} />
 
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{product.name}</h1>

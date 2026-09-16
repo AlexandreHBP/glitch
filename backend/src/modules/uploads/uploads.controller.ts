@@ -27,6 +27,7 @@ import { UploadsService } from './uploads.service';
 
 const IMAGE_MAX_BYTES = 8 * 1024 * 1024;
 const AUDIO_MAX_BYTES = 15 * 1024 * 1024;
+const MODEL3D_MAX_BYTES = 25 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const ALLOWED_AUDIO_TYPES = ['audio/mpeg'];
 
@@ -71,6 +72,31 @@ export class UploadsController {
   async uploadAudio(@UploadedFile() file: UploadedFileLike) {
     this.validateFile(file, ALLOWED_AUDIO_TYPES, 'áudio');
     const url = await this.uploadsService.saveAudio(file.buffer);
+    return { url };
+  }
+
+  @Post('model3d')
+  @ApiOperation({
+    summary:
+      'Envia o modelo 3D (.glb) de um produto, para o visualizador giratório no site',
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      limits: { fileSize: MODEL3D_MAX_BYTES },
+    }),
+  )
+  async uploadModel3d(@UploadedFile() file: UploadedFileLike) {
+    if (!file) {
+      throw new BadRequestException('Nenhum arquivo de modelo 3D enviado');
+    }
+    // Diferente de imagem/áudio, o Content-Type de .glb enviado por
+    // navegador é inconsistente (varia entre "model/gltf-binary",
+    // "application/octet-stream" ou vazio) — não vale a pena checar aqui.
+    // A validação de verdade (magic bytes + tamanho declarado no header)
+    // acontece em UploadsService.saveModel3d, nos bytes reais do arquivo.
+    const url = await this.uploadsService.saveModel3d(file.buffer);
     return { url };
   }
 

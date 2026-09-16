@@ -101,6 +101,9 @@ export default function ProductFormPage() {
   const [serverError, setServerError] = useState("");
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [model3dUrl, setModel3dUrl] = useState<string | null>(null);
+  const [model3dFileName, setModel3dFileName] = useState<string | null>(null);
+  const [isUploadingModel3d, setIsUploadingModel3d] = useState(false);
 
   const productFromState = (location.state as { product?: Product } | null)?.product;
 
@@ -149,6 +152,8 @@ export default function ProductFormPage() {
           .sort((a, b) => a.position - b.position)
           .map((image) => image.url)
       );
+      setModel3dUrl(product.model3dUrl ?? null);
+      setModel3dFileName(product.model3dUrl ? product.model3dUrl.split("/").pop() ?? null : null);
     }
   }, [product, reset]);
 
@@ -159,7 +164,7 @@ export default function ProductFormPage() {
 
   const mutation = useMutation({
     mutationFn: async (values: ProductFormValues) => {
-      const payload = {
+      const basePayload = {
         name: values.name,
         description: values.description || undefined,
         basePrice: values.basePrice,
@@ -184,9 +189,11 @@ export default function ProductFormPage() {
         })),
       };
       if (isEditing && id) {
-        return productService.update(id, payload);
+        // null é enviado explicitamente quando o admin remove o modelo 3D
+        // (ver UpdateProductDto, que aceita null para limpar o campo).
+        return productService.update(id, { ...basePayload, model3dUrl: model3dUrl ?? null });
       }
-      return productService.create(payload);
+      return productService.create({ ...basePayload, model3dUrl: model3dUrl ?? undefined });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -209,6 +216,28 @@ export default function ProductFormPage() {
       setIsUploadingPhoto(false);
       event.target.value = "";
     }
+  };
+
+  const handleModel3dUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setIsUploadingModel3d(true);
+    setServerError("");
+    try {
+      const { url } = await uploadService.uploadModel3d(file);
+      setModel3dUrl(url);
+      setModel3dFileName(file.name);
+    } catch (err) {
+      setServerError(getErrorMessage(err));
+    } finally {
+      setIsUploadingModel3d(false);
+      event.target.value = "";
+    }
+  };
+
+  const handleModel3dRemove = () => {
+    setModel3dUrl(null);
+    setModel3dFileName(null);
   };
 
   if (isEditing && !product && isLoadingFallback) {
@@ -386,6 +415,34 @@ export default function ProductFormPage() {
                   </button>
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+          <h3 className="mb-2 text-base font-medium text-gray-800 dark:text-white/90">
+            Modelo 3D (opcional)
+          </h3>
+          <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+            Envie um arquivo .glb para o cliente poder girar o produto em 3D na página do site, em
+            vez de só ver fotos estáticas.
+          </p>
+          {!model3dUrl && (
+            <FileInput accept=".glb,model/gltf-binary" onChange={handleModel3dUpload} className="mb-3" />
+          )}
+          {isUploadingModel3d && <Spinner size="sm" />}
+          {model3dUrl && !isUploadingModel3d && (
+            <div className="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 dark:border-gray-800">
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                {model3dFileName ?? "Modelo 3D enviado"}
+              </span>
+              <button
+                type="button"
+                onClick={handleModel3dRemove}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-error-500 hover:bg-error-50 dark:border-gray-700 dark:hover:bg-error-500/10"
+              >
+                Remover
+              </button>
             </div>
           )}
         </div>
