@@ -45,20 +45,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-black">
       <nav aria-label="Navegação principal" className="container-section flex h-16 items-center justify-between">
-        <Link href="/" className="glitch-hover flex items-center gap-2 font-semibold tracking-tight">
-          <span
-            aria-hidden="true"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-wine-bright to-wine text-bone shadow-lg shadow-wine/40"
-          >
-            ◆
-          </span>
+        <Link href="/" className="glitch-hover flex items-center font-semibold tracking-tight">
           <Image
             src="/brand/glitch-logo.png"
             alt={siteConfig.wordmark}
-            width={140}
-            height={70}
+            width={200}
+            height={100}
             priority
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
         </Link>
 
