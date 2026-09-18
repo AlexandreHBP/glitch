@@ -12,6 +12,7 @@
  */
 import Link from "next/link";
 import Image from "next/image";
+import { FaInstagram, FaTiktok, FaDiscord, FaYoutube } from "react-icons/fa6";
 import { BlackSheep } from "@/components/glitch/BlackSheep";
 import { siteConfig } from "@/lib/site-config";
 
@@ -47,10 +48,10 @@ const columns = [
 ];
 
 const socials = [
-  { label: "Instagram", short: "IG", href: siteConfig.social.instagram },
-  { label: "TikTok", short: "TK", href: siteConfig.social.tiktok },
-  { label: "Discord", short: "DC", href: siteConfig.social.discord },
-  { label: "YouTube", short: "YT", href: siteConfig.social.youtube },
+  { label: "Instagram", Icon: FaInstagram, href: siteConfig.social.instagram },
+  { label: "TikTok", Icon: FaTiktok, href: siteConfig.social.tiktok },
+  { label: "Discord", Icon: FaDiscord, href: siteConfig.social.discord },
+  { label: "YouTube", Icon: FaYoutube, href: siteConfig.social.youtube },
 ];
 
 export function Footer() {
@@ -80,9 +81,9 @@ export function Footer() {
                     target="_blank"
                     rel="noreferrer noopener"
                     aria-label={social.label}
-                    className="glitch-hover flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-xs font-semibold uppercase text-slate-300 hover:border-white/40 hover:text-white"
+                    className="glitch-hover flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-slate-300 hover:border-white/40 hover:text-white"
                   >
-                    {social.short}
+                    <social.Icon size={18} aria-hidden="true" />
                   </a>
                 </li>
               ))}

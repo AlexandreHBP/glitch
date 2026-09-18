@@ -14,12 +14,12 @@ const CAMPAIGN_PHOTOS = [
 
 // TODO(Alexandre): números de exemplo do mockup de referência, não dados
 // reais da loja (que está começando agora). Troque pelos números reais
-// assim que houver histórico — ex.: total de peças no catálogo, faixa de
-// tamanhos realmente cadastrada e países atendidos, se aplicável.
+// assim que houver histórico — ex.: total de peças no catálogo e faixa
+// de tamanhos realmente cadastrada. O item "países atendidos" foi
+// removido a pedido do Alexandre — a loja não vende para outros países.
 const STATS = [
   { value: "14K+", label: "Estilos" },
   { value: "XS–5XL", label: "Cada peça" },
-  { value: "50+", label: "Países" },
 ] as const;
 
 // Cabeçalho de boas-vindas da loja (RF01) — compacto de propósito: a home

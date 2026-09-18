@@ -45,7 +45,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-black">
       <nav aria-label="Navegação principal" className="container-section flex h-16 items-center justify-between">
-        <Link href="/" className="glitch-hover flex items-center font-semibold tracking-tight">
+        <Link href="/" className="flex items-center font-semibold tracking-tight">
           <Image
             src="/brand/glitch-logo.png"
             alt={siteConfig.wordmark}
