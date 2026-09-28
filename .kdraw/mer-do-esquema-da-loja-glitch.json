@@ -1,0 +1,154 @@
+{
+  "kind": "MER",
+  "title": "Esquema de dados da Loja Glitch",
+  "direction": "LR",
+  "entities": [
+    {
+      "id": "users",
+      "name": "users",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "email", "type": "varchar(180)", "unique": true },
+        { "name": "password_hash", "type": "varchar(72)" },
+        { "name": "name", "type": "varchar(120)" },
+        { "name": "phone", "type": "varchar(20)", "nullable": true },
+        { "name": "role", "type": "varchar(20)" },
+        { "name": "created_at", "type": "timestamptz" },
+        { "name": "updated_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "categories",
+      "name": "categories",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "name", "type": "varchar(80)" },
+        { "name": "slug", "type": "varchar(80)", "unique": true },
+        { "name": "position", "type": "int" }
+      ]
+    },
+    {
+      "id": "products",
+      "name": "products",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "category_id", "type": "uuid", "fk": true, "nullable": true },
+        { "name": "name", "type": "varchar(140)" },
+        { "name": "slug", "type": "varchar(160)", "unique": true },
+        { "name": "description", "type": "text", "nullable": true },
+        { "name": "base_price", "type": "numeric(10,2)" },
+        { "name": "active", "type": "boolean" },
+        { "name": "created_at", "type": "timestamptz" },
+        { "name": "updated_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "product_images",
+      "name": "product_images",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "product_id", "type": "uuid", "fk": true },
+        { "name": "url", "type": "varchar(255)" },
+        { "name": "alt", "type": "varchar(140)", "nullable": true },
+        { "name": "position", "type": "int" },
+        { "name": "is_cover", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "product_variants",
+      "name": "product_variants",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "product_id", "type": "uuid", "fk": true },
+        { "name": "sku", "type": "varchar(60)", "unique": true },
+        { "name": "size", "type": "varchar(20)" },
+        { "name": "color", "type": "varchar(40)" },
+        { "name": "price_override", "type": "numeric(10,2)", "nullable": true },
+        { "name": "stock_quantity", "type": "int" },
+        { "name": "active", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "orders",
+      "name": "orders",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "user_id", "type": "uuid", "fk": true },
+        { "name": "order_number", "type": "varchar(20)", "unique": true },
+        { "name": "status", "type": "varchar(24)" },
+        { "name": "total", "type": "numeric(10,2)" },
+        { "name": "delivery_method", "type": "varchar(20)" },
+        { "name": "delivery_address", "type": "jsonb", "nullable": true },
+        { "name": "customer_notes", "type": "text", "nullable": true },
+        { "name": "admin_notes", "type": "text", "nullable": true },
+        { "name": "created_at", "type": "timestamptz" },
+        { "name": "updated_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "order_items",
+      "name": "order_items",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "order_id", "type": "uuid", "fk": true },
+        { "name": "product_variant_id", "type": "uuid", "fk": true },
+        { "name": "product_name", "type": "varchar(140)" },
+        { "name": "variant_label", "type": "varchar(80)" },
+        { "name": "unit_price", "type": "numeric(10,2)" },
+        { "name": "quantity", "type": "int" },
+        { "name": "subtotal", "type": "numeric(10,2)" }
+      ]
+    },
+    {
+      "id": "order_status_history",
+      "name": "order_status_history",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "order_id", "type": "uuid", "fk": true },
+        { "name": "changed_by", "type": "uuid", "fk": true, "nullable": true },
+        { "name": "status", "type": "varchar(24)" },
+        { "name": "note", "type": "varchar(255)", "nullable": true },
+        { "name": "created_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "stock_movements",
+      "name": "stock_movements",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "product_variant_id", "type": "uuid", "fk": true },
+        { "name": "order_id", "type": "uuid", "fk": true, "nullable": true },
+        { "name": "type", "type": "varchar(20)" },
+        { "name": "quantity_delta", "type": "int" },
+        { "name": "reason", "type": "varchar(140)", "nullable": true },
+        { "name": "created_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "playlist_tracks",
+      "name": "playlist_tracks",
+      "attributes": [
+        { "name": "id", "type": "uuid", "pk": true },
+        { "name": "created_by", "type": "uuid", "fk": true, "nullable": true },
+        { "name": "title", "type": "varchar(120)" },
+        { "name": "artist", "type": "varchar(120)", "nullable": true },
+        { "name": "audio_url", "type": "varchar(255)" },
+        { "name": "position", "type": "int" },
+        { "name": "active", "type": "boolean" }
+      ]
+    }
+  ],
+  "relationships": [
+    { "id": "r1", "from": "categories", "to": "products", "cardinality": "1-N", "label": "agrupa", "fromField": "id", "toField": "category_id" },
+    { "id": "r2", "from": "products", "to": "product_variants", "cardinality": "1-N", "label": "tem variacoes", "fromField": "id", "toField": "product_id" },
+    { "id": "r3", "from": "products", "to": "product_images", "cardinality": "1-N", "label": "tem fotos", "fromField": "id", "toField": "product_id" },
+    { "id": "r4", "from": "users", "to": "orders", "cardinality": "1-N", "label": "faz", "fromField": "id", "toField": "user_id" },
+    { "id": "r5", "from": "orders", "to": "order_items", "cardinality": "1-N", "label": "contem", "fromField": "id", "toField": "order_id" },
+    { "id": "r6", "from": "product_variants", "to": "order_items", "cardinality": "1-N", "label": "vendida em", "fromField": "id", "toField": "product_variant_id" },
+    { "id": "r7", "from": "orders", "to": "order_status_history", "cardinality": "1-N", "label": "registra status", "fromField": "id", "toField": "order_id" },
+    { "id": "r8", "from": "users", "to": "order_status_history", "cardinality": "1-N", "label": "alterou", "fromField": "id", "toField": "changed_by" },
+    { "id": "r9", "from": "product_variants", "to": "stock_movements", "cardinality": "1-N", "label": "movimenta", "fromField": "id", "toField": "product_variant_id" },
+    { "id": "r10", "from": "orders", "to": "stock_movements", "cardinality": "1-N", "label": "origina baixa", "fromField": "id", "toField": "order_id" },
+    { "id": "r11", "from": "users", "to": "playlist_tracks", "cardinality": "1-N", "label": "cadastra", "fromField": "id", "toField": "created_by" }
+  ]
+}

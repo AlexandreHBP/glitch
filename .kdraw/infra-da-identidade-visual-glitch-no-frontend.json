@@ -1,0 +1,46 @@
+{
+  "kind": "infra",
+  "title": "Camada de identidade visual Glitch (Fase 4)",
+  "direction": "TB",
+  "groups": [
+    { "id": "base", "label": "Base de tema" },
+    { "id": "efeitos", "label": "Efeitos visuais" },
+    { "id": "audio", "label": "Audio" }
+  ],
+  "nodes": [
+    { "id": "layout", "type": "frontend", "label": "AppLayout", "tech": "envolve todas as rotas", "group": "base",
+      "description": "Monta tema, rodape com a ovelha e o player uma unica vez." },
+    { "id": "tokens", "type": "service", "label": "Tokens de tema", "tech": "CSS vars · Tailwind", "group": "base",
+      "description": "Cor principal #670001 e escala de tons derivados em um so lugar.",
+      "comment": "Definir o vinho como variavel (--glitch-wine) e nao hardcoded nos componentes.\nTexto puro sobre #670001 tem contraste baixo: usar branco/off-white e nunca\ncinza medio, senao o site falha em legibilidade no celular." },
+    { "id": "motion", "type": "service", "label": "Guarda de movimento", "tech": "prefers-reduced-motion", "group": "base",
+      "description": "Hook unico que desliga glitch, parallax e ovelha quando o usuario pede menos animacao.",
+      "comment": "E o que impede o RF09/RF12 de virarem problema de acessibilidade e de\nenjoo visual. Tambem serve de chave geral para desligar efeito em telas\npequenas e em dispositivos lentos." },
+    { "id": "glitchtext", "type": "service", "label": "GlitchText", "tech": "CSS puro · clip-path", "group": "efeitos",
+      "description": "Logo e titulos de secao com distorcao; texto real permanece legivel (RF09)." },
+    { "id": "glitchhover", "type": "service", "label": "useGlitchHover", "tech": "hover e touch", "group": "efeitos",
+      "description": "Reacao glitch em botoes e imagens; no celular dispara no toque." },
+    { "id": "parallax", "type": "service", "label": "ParallaxSection", "tech": "rAF · IntersectionObserver", "group": "efeitos",
+      "description": "Fundo em velocidade diferente do conteudo (RF12).",
+      "comment": "Unico efeito que roda JS por frame. Anexar so em secoes visiveis, mover\napenas transform (nunca top/background-position) e desativar abaixo de 768px:\ne o principal candidato a travar a rolagem em celular fraco." },
+    { "id": "sheep", "type": "service", "label": "BlackSheep", "tech": "SVG · keyframes", "group": "efeitos",
+      "description": "Ovelha negra atravessando o rodape em loop continuo (RF11)." },
+    { "id": "player", "type": "service", "label": "MusicPlayer", "tech": "HTMLAudioElement · Context", "group": "audio",
+      "description": "Instancia unica de audio no layout: a musica nao corta ao trocar de pagina.",
+      "comment": "autoplay e proibido por regra de negocio (RN04) e tambem bloqueado pelos\nnavegadores. Usar preload=\"none\" para nao baixar mp3 de quem nunca clica\nem play — sem isso o site fica lento para todo mundo." },
+    { "id": "api", "type": "api", "label": "GET /playlist", "tech": "faixas ativas", "group": "audio",
+      "description": "Lista publica alimentada pelo painel do admin." }
+  ],
+  "edges": [
+    { "from": "layout", "to": "tokens", "label": "aplica tema", "animated": true },
+    { "from": "layout", "to": "glitchtext", "label": "logo e titulos", "animated": true },
+    { "from": "layout", "to": "parallax", "label": "secoes de fundo" },
+    { "from": "layout", "to": "sheep", "label": "rodape", "animated": true },
+    { "from": "layout", "to": "player", "label": "barra fixa", "animated": true },
+    { "from": "glitchtext", "to": "glitchhover", "label": "compartilha keyframes", "dashed": true },
+    { "from": "motion", "to": "glitchtext", "label": "desliga", "dashed": true },
+    { "from": "motion", "to": "parallax", "label": "desliga", "dashed": true },
+    { "from": "motion", "to": "sheep", "label": "desliga", "dashed": true },
+    { "from": "player", "to": "api", "label": "busca faixas", "animated": true }
+  ]
+}
